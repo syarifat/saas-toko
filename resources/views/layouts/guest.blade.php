@@ -5,49 +5,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>Masuk — {{ config('app.name', 'SaaSToko') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>body { font-family: 'Inter', system-ui, sans-serif; }</style>
     </head>
-    <body class="font-sans text-slate-900 antialiased">
+    <body class="bg-white text-slate-800 antialiased">
         <div class="min-h-screen lg:grid lg:grid-cols-2">
-            <!-- Brand Panel -->
-            <div class="relative hidden lg:flex lg:flex-col lg:justify-between bg-brand-900 text-white p-12 overflow-hidden">
-                <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-700/40 blur-3xl"></div>
-                <div class="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-brand-500/30 blur-3xl"></div>
+            <!-- Left: branding -->
+            <div class="hidden lg:flex flex-col justify-between bg-slate-900 text-white p-12">
+                <a href="{{ url('/') }}" class="flex items-center gap-2.5">
+                    <div class="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
+                        <svg class="h-4.5 w-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
+                    <span class="font-bold text-lg">SaaSToko</span>
+                </a>
 
-                <div class="relative flex items-center gap-3">
-                    <x-application-logo class="h-10 w-10" />
-                    <span class="font-bold text-xl tracking-tight">SaasToko</span>
-                </div>
-
-                <div class="relative max-w-md">
-                    <h1 class="text-3xl font-bold leading-snug">Kelola toko, stok & karyawan dalam satu sistem.</h1>
-                    <p class="mt-4 text-brand-100/80 leading-relaxed">Mulai dari pencatatan kas sederhana hingga multi-gudang dan payroll — pilih paket yang pas untuk bisnis Anda.</p>
-                    <ul class="mt-8 space-y-3 text-brand-100/90 text-sm">
-                        <li class="flex items-center gap-3"><span class="h-2 w-2 rounded-full bg-brand-300"></span> Kasir POS & manajemen stok real-time</li>
-                        <li class="flex items-center gap-3"><span class="h-2 w-2 rounded-full bg-brand-300"></span> Multi-gudang & transfer antar cabang</li>
-                        <li class="flex items-center gap-3"><span class="h-2 w-2 rounded-full bg-brand-300"></span> Absensi GPS & penggajian otomatis</li>
+                <div class="max-w-sm">
+                    <h1 class="text-2xl font-bold leading-snug">Kelola toko, stok, dan karyawan dalam satu sistem.</h1>
+                    <p class="mt-3 text-slate-400 text-sm leading-relaxed">Pilih modul yang pas untuk bisnis Anda — dari pencatatan kas sederhana hingga multi-gudang dan payroll.</p>
+                    <ul class="mt-6 space-y-2 text-sm text-slate-300">
+                        <li class="flex gap-2">— Kasir POS & manajemen stok</li>
+                        <li class="flex gap-2">— Multi-gudang & transfer</li>
+                        <li class="flex gap-2">— Absensi GPS & penggajian</li>
                     </ul>
                 </div>
 
-                <p class="relative text-xs text-brand-300/70">© {{ date('Y') }} SaasToko — Mega System SaaS.</p>
+                <p class="text-xs text-slate-500">© {{ date('Y') }} SaaSToko</p>
             </div>
 
-            <!-- Form Panel -->
-            <div class="flex flex-col items-center justify-center px-6 py-12 bg-slate-50">
+            <!-- Right: form -->
+            <div class="flex flex-col items-center justify-center px-6 py-12 bg-white">
                 <div class="w-full max-w-md">
-                    <div class="lg:hidden flex items-center justify-center gap-3 mb-8">
-                        <x-application-logo class="h-11 w-11" />
-                        <span class="font-bold text-xl tracking-tight text-brand-900">SaasToko</span>
+                    <div class="lg:hidden flex items-center gap-2.5 mb-8">
+                        <div class="h-8 w-8 rounded-lg bg-slate-900 flex items-center justify-center">
+                            <svg class="h-4.5 w-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                        <span class="font-bold text-lg text-slate-900">SaaSToko</span>
                     </div>
 
-                    <div class="card p-8 sm:p-10">
-                        {{ $slot }}
-                    </div>
+                    {{ $slot }}
                 </div>
             </div>
         </div>
