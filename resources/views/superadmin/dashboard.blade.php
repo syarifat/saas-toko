@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-brand-900 leading-tight">
             {{ __('Panel Superadmin') }}
         </h2>
     </x-slot>
@@ -11,22 +11,22 @@
         @endif
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white p-6 rounded-lg shadow">
-                <p class="text-sm text-gray-500">Total Toko</p>
-                <p class="text-3xl font-bold">{{ $jumlahToko }}</p>
+            <div class="card p-6">
+                <p class="text-sm text-slate-500">Total Toko</p>
+                <p class="text-3xl font-bold text-brand-900">{{ $jumlahToko }}</p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <p class="text-sm text-gray-500">Toko Aktif</p>
-                <p class="text-3xl font-bold">{{ $tokoAktif }}</p>
+            <div class="card p-6">
+                <p class="text-sm text-slate-500">Toko Aktif</p>
+                <p class="text-3xl font-bold text-brand-900">{{ $tokoAktif }}</p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <p class="text-sm text-gray-500">Total Pengguna</p>
-                <p class="text-3xl font-bold">{{ $jumlahPengguna }}</p>
+            <div class="card p-6">
+                <p class="text-sm text-slate-500">Total Pengguna</p>
+                <p class="text-3xl font-bold text-brand-900">{{ $jumlahPengguna }}</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white p-6 rounded-lg shadow">
+            <div class="card p-6">
                 <h3 class="font-semibold mb-4">Toko per Paket</h3>
                 <ul class="space-y-2">
                     @foreach ($paket as $p)
@@ -38,7 +38,7 @@
                 </ul>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow">
+            <div class="card p-6">
                 <h3 class="font-semibold mb-4">Master Add-on</h3>
                 <ul class="space-y-2">
                     @foreach ($addon as $a)
@@ -51,7 +51,7 @@
 
                 @php($menungguVerifikasi = \App\Models\Pembayaran::where('status', 'menunggu')->count())
                 <a href="{{ route('superadmin.verifikasi.index') }}"
-                    class="mt-4 block px-4 py-2 {{ $menungguVerifikasi > 0 ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-800 hover:bg-gray-700' }} text-white rounded-md text-center text-sm font-semibold">
+                    class="mt-4 block px-4 py-2 {{ $menungguVerifikasi > 0 ? 'bg-amber-500 hover:bg-amber-400' : 'bg-brand-600 hover:bg-brand-500' }} text-white rounded-md text-center text-sm font-semibold">
                     Verifikasi Pembayaran{{ $menungguVerifikasi > 0 ? " ({$menungguVerifikasi} menunggu)" : '' }}
                 </a>
             </div>

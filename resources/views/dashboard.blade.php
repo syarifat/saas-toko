@@ -1,6 +1,6 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <x-slot name="header">
+        <h2 class="font-semibold text-xl text-brand-900 leading-tight">
             {{ __('Dashboard') }} {{ auth()->user()->toko ? '— '.auth()->user()->toko->nama : '' }}
         </h2>
     </x-slot>
@@ -38,16 +38,16 @@
             @endif
         @endif
 
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 space-y-3">
+        <div class="card">
+            <div class="p-6 text-slate-900 space-y-3">
                 <p>Selamat datang, <strong>{{ auth()->user()->name }}</strong>!</p>
 
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('pengeluaran.create') }}" class="px-4 py-2 bg-gray-800 text-white rounded-md text-sm hover:bg-gray-700">+ Catat Pengeluaran</a>
-                    <a href="{{ route('penjualan-sederhana.create') }}" class="px-4 py-2 bg-gray-800 text-white rounded-md text-sm hover:bg-gray-700">+ Catat Penjualan</a>
-                    <a href="{{ route('rekap.index') }}" class="px-4 py-2 border rounded-md text-sm hover:bg-gray-50">Lihat Rekap</a>
+                    <a href="{{ route('pengeluaran.create') }}" class="px-4 py-2 bg-brand-600 text-white rounded-md text-sm font-medium hover:bg-brand-500">+ Catat Pengeluaran</a>
+                    <a href="{{ route('penjualan-sederhana.create') }}" class="px-4 py-2 bg-brand-600 text-white rounded-md text-sm font-medium hover:bg-brand-500">+ Catat Penjualan</a>
+                    <a href="{{ route('rekap.index') }}" class="px-4 py-2 border border-slate-300 rounded-md text-sm font-medium text-brand-700 hover:bg-brand-50">Lihat Rekap</a>
                     @if (auth()->user()->toko?->setidaknyaPaket(2))
-                        <a href="{{ route('kasir.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-500">Buka Kasir POS</a>
+                        <a href="{{ route('kasir.index') }}" class="px-4 py-2 bg-brand-600 text-white rounded-md text-sm font-medium hover:bg-brand-500">Buka Kasir POS</a>
                     @endif
                 </div>
             </div>
