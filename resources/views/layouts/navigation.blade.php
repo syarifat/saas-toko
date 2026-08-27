@@ -12,63 +12,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if (auth()->user()?->isSuperadmin())
-                        <x-nav-link :href="route('superadmin.dashboard')" :active="request()->routeIs('superadmin.*')">
-                            {{ __('Superadmin') }}
-                        </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('pengeluaran.index')" :active="request()->routeIs('pengeluaran.*')">
-                            {{ __('Pengeluaran') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('penjualan-sederhana.index')" :active="request()->routeIs('penjualan-sederhana.*')">
-                            {{ __('Penjualan') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('rekap.index')" :active="request()->routeIs('rekap.*')">
-                            {{ __('Rekap') }}
-                        </x-nav-link>
-                        @if (auth()->user()->toko && auth()->user()->toko->setidaknyaPaket(2))
-                            <x-nav-link :href="route('produk.index')" :active="request()->routeIs('produk.*')">
-                                {{ __('Produk') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('kasir.index')" :active="request()->routeIs('kasir.*')">
-                                {{ __('Kasir') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('stok-opname.index')" :active="request()->routeIs('stok-opname.*')">
-                                {{ __('Opname') }}
-                            </x-nav-link>
-                        @endif
-                        @if (auth()->user()->toko && auth()->user()->toko->setidaknyaPaket(3))
-                            <x-nav-link :href="route('gudang.index')" :active="request()->routeIs('gudang.*')">
-                                {{ __('Gudang') }}
-                            </x-nav-link>
-                        @endif
-                        @if (auth()->user()->toko && auth()->user()->toko->punyaAddon('absensi'))
-                            <x-nav-link :href="route('absensi.index')" :active="request()->routeIs('absensi.*')">
-                                {{ __('Absensi') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('rekap-kehadiran.index')" :active="request()->routeIs('rekap-kehadiran.*')">
-                                {{ __('Kehadiran') }}
-                            </x-nav-link>
-                        @endif
-                        @if (auth()->user()->toko && auth()->user()->toko->punyaAddon('penggajian'))
-                            @if (auth()->user()->peran === 'admin')
-                                <x-nav-link :href="route('karyawan.index')" :active="request()->routeIs('karyawan.*')">
-                                    {{ __('Karyawan') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('penggajian.index')" :active="request()->routeIs('penggajian.*', 'payslip.*')">
-                                    {{ __('Payroll') }}
-                                </x-nav-link>
-                            @endif
-                        @endif
-                        @if (auth()->user()?->peran === 'admin')
-                            <x-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.*')">
-                                {{ __('Tagihan') }}
-                            </x-nav-link>
-                        @endif
-                    @endif
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -121,63 +67,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @if (auth()->user()?->isSuperadmin())
-                <x-responsive-nav-link :href="route('superadmin.dashboard')" :active="request()->routeIs('superadmin.*')">
-                    {{ __('Superadmin') }}
-                </x-responsive-nav-link>
-            @else
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('pengeluaran.index')" :active="request()->routeIs('pengeluaran.*')">
-                    {{ __('Pengeluaran') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('penjualan-sederhana.index')" :active="request()->routeIs('penjualan-sederhana.*')">
-                    {{ __('Penjualan') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('rekap.index')" :active="request()->routeIs('rekap.*')">
-                    {{ __('Rekap') }}
-                </x-responsive-nav-link>
-                @if (auth()->user()->toko && auth()->user()->toko->setidaknyaPaket(2))
-                    <x-responsive-nav-link :href="route('produk.index')" :active="request()->routeIs('produk.*')">
-                        {{ __('Produk') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('kasir.index')" :active="request()->routeIs('kasir.*')">
-                        {{ __('Kasir') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('stok-opname.index')" :active="request()->routeIs('stok-opname.*')">
-                        {{ __('Opname') }}
-                    </x-responsive-nav-link>
-                @endif
-                @if (auth()->user()->toko && auth()->user()->toko->setidaknyaPaket(3))
-                    <x-responsive-nav-link :href="route('gudang.index')" :active="request()->routeIs('gudang.*')">
-                        {{ __('Gudang') }}
-                    </x-responsive-nav-link>
-                @endif
-                @if (auth()->user()->toko && auth()->user()->toko->punyaAddon('absensi'))
-                    <x-responsive-nav-link :href="route('absensi.index')" :active="request()->routeIs('absensi.*')">
-                        {{ __('Absensi') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('rekap-kehadiran.index')" :active="request()->routeIs('rekap-kehadiran.*')">
-                        {{ __('Kehadiran') }}
-                    </x-responsive-nav-link>
-                @endif
-                @if (auth()->user()->toko && auth()->user()->toko->punyaAddon('penggajian'))
-                    @if (auth()->user()->peran === 'admin')
-                        <x-responsive-nav-link :href="route('karyawan.index')" :active="request()->routeIs('karyawan.*')">
-                            {{ __('Karyawan') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('penggajian.index')" :active="request()->routeIs('penggajian.*', 'payslip.*')">
-                            {{ __('Payroll') }}
-                        </x-responsive-nav-link>
-                    @endif
-                @endif
-                @if (auth()->user()?->peran === 'admin')
-                    <x-responsive-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.*')">
-                        {{ __('Tagihan') }}
-                    </x-responsive-nav-link>
-                @endif
-            @endif
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

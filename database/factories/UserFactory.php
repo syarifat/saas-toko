@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Toko;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -30,29 +29,8 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'peran' => 'karyawan',
-            'sub_peran' => fake()->randomElement(['kasir', 'gudang']),
-            'aktif' => true,
             'remember_token' => Str::random(10),
         ];
-    }
-
-    public function superadmin(): static
-    {
-        return $this->state(fn () => [
-            'toko_id' => null,
-            'peran' => 'superadmin',
-            'sub_peran' => null,
-        ]);
-    }
-
-    public function adminToko(?Toko $toko = null): static
-    {
-        return $this->state(fn () => [
-            'toko_id' => $toko?->id,
-            'peran' => 'admin',
-            'sub_peran' => null,
-        ]);
     }
 
     /**
