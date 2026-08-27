@@ -1,4 +1,4 @@
-# # Panduan Implementasi — Mega System SaaS Toko (Modular)
+# Panduan Implementasi — Mega System SaaS Toko (Modular)
 **Untuk: AI Agent Eksekutor**
 
 > Baca dokumen ini lengkap sebelum menulis satu baris kode pun.
