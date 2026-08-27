@@ -5,13 +5,14 @@
 **Mega System SaaS Toko** adalah aplikasi **SaaS (Software as a Service) untuk manajemen toko** yang memungkinkan satu instalasi Laravel melayani banyak toko (multi-tenant). Setiap toko mendaftar, memilih paket berlangganan, dan menggunakan fitur sesuai tier yang dibayar. Cocok untuk penyedia layanan yang ingin menjual sistem kasir + stok + payroll ke banyak pedagang kecil-menengah.
 
 ### Model Bisnis
-- **3 Tingkat Paket** (upgrade bertingkat):
-  - **Paket 1 — Cashbook**: pencatatan pengeluaran & penjualan ringkas + rekap laba kotor.
-  - **Paket 2 — POS & Stok**: tambah master produk/kategori/pemasok, kasir POS, stok opname, alert stok menipis.
-  - **Paket 3 — Gudang**: multi-gudang, barang masuk, transfer antar gudang, kartu stok.
-- **2 Add-on** (bisa dibeli terpisah, butuh minimal Paket 1):
-  - **Absensi**: presensi karyawan berbasis GPS (geotagging + radius).
-  - **Payroll**: perhitungan gaji + slip gaji digital.
+- **Sistem Modular** (16 modul, dependency-validated):
+  - **Preset 1 — Cashbook**: pengeluaran, master produk, penjualan ringkas, rekap laba kotor.
+  - **Preset 2 — POS & Stok**: + kasir POS (validasi sisa stok), manajemen stok, stock alert, stok opname, laporan HPP.
+  - **Preset 3 — Gudang**: + multi-gudang, barang masuk, transfer antar gudang, kartu stok.
+  - **Custom**: superadmin bisa buat paket custom per tenant dengan kombinasi modul bebas.
+- **Modul HRIS** (bisa ditambahkan ke preset apapun):
+  - **Karyawan + Absensi**: presensi berbasis GPS (geotagging + radius).
+  - **Payroll**: perhitungan gaji + slip gaji digital. ⚠️ Wajib aktif bersama Absensi.
 - **Billing manual**: tenant upload bukti transfer, superadmin memverifikasi secara manual (belum integrasi payment gateway).
 
 ### Teknologi
@@ -32,8 +33,9 @@ Jika Anda berhenti menggunakan AI agent ini, berikut catatan lengkap apa yang su
 | Komponen | Lokasi | Fungsi |
 |---|---|---|
 | Global scope tenant | `app/Models/Concerns/BelongsToToko.php` | Otomatis filter semua query by `toko_id` → isolasi data antar toko |
-| Model inti | `app/Models/Toko.php`, `Paket.php`, `Addon.php`, `Pembayaran.php`, `User.php` (Pengguna) | Entitas domain |
-| Middleware akses | `app/Http/Middleware/` (`Peran`, `EnsureTokoContext`, `CekPaket`, `CekAddon`) | Gate peran, konteks toko, tier paket, add-on |
+| Model inti | `app/Models/Toko.php`, `Paket.php`, `Modul.php`, `PaketModul.php`, `ModulToko.php`, `KetergantunganModul.php`, `Pembayaran.php`, `Pengguna.php` | Entitas domain |
+| Middleware akses | `app/Http/Middleware/` (`Peran`, `EnsureTokoContext`, `CekModul`) | Gate peran, konteks toko, validasi modul aktif per toko |
+| Service modul | `app/Services/ModulService.php` | Aktivasi/deaktivasi modul dengan dependency validation (dua arah) |
 | Controller tenant | `app/Http/Controllers/` (Pengeluaran, PenjualanSederhana, Produk, Kasir, Gudang, Karyawan, Absensi, Penggajian, Tagihan, dll) | Logika fitur |
 | Controller superadmin | `app/Http/Controllers/Superadmin/` | CRUD toko/paket/add-on + verifikasi pembayaran |
 | Service stok | `app/Services/StokService.php` | Deduct/restock stok + tulis `pergerakan_stok` (transaction) |

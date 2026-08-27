@@ -3,29 +3,31 @@
 ## Fase 1 — Fondasi & Multi-Tenancy ✅
 - [ ] Install Laravel Boost (`composer require laravel/boost --dev && php artisan boost:install`)
 - [ ] Install Laravel Breeze (Blade + Tailwind)
-- [ ] Migration inti: `toko`, `paket`, `addon`, `addon_toko`; ubah `pengguna` (peran, sub_peran, toko_id, aktif, dibuat_oleh)
-- [ ] Model + relasi: Toko, Paket, Addon, Pengguna
+- [ ] Migration inti: `toko`, `paket` (jenis: preset_1/2/3/custom), `modul`, `ketergantungan_modul`, `paket_modul`, `modul_toko`; ubah `pengguna` (peran, sub_peran, toko_id, aktif, dibuat_oleh)
+- [ ] Model + relasi: Toko, Paket, Modul, KetergantunganModul, PaketModul, ModulToko, Pengguna
 - [ ] Trait `BelongsToToko` (global scope by toko_id)
-- [ ] Middleware: `peran`, `konteks_toko`, `paket`, `addon`
-- [ ] Helper `Toko::setidaknyaPaket()`, `Toko::punyaAddon()`
-- [ ] Seeder: superadmin default + 3 master paket + 2 add-on
-- [ ] Panel Superadmin: CRUD toko + admin toko, CRUD paket & add-on, toggle add-on per toko
-- [ ] Flow registrasi toko oleh superadmin (auto-buat user admin)
+- [ ] Middleware: `peran`, `konteks_toko`, `CekModul` (gantikan `CekPaket`+`CekAddon`)
+- [ ] Service `ModulService`: aktivasi modul (validasi dependency), deaktivasi modul (validasi dependan), sinkronisasi preset ke modul_toko
+- [ ] Helper `Toko::modulAktif('kode')`, `Toko::pakaiPreset(Paket $paket)`
+- [ ] Seeder: superadmin default + 3 preset paket + 16 modul + dependency graph lengkap
+- [ ] Panel Superadmin — Manajemen Paket: CRUD preset + custom (pilih modul, harga, deskripsi; validasi dependency)
+- [ ] Panel Superadmin — Manajemen Toko: CRUD toko + admin toko, toggle modul per toko dengan dependency validation
+- [ ] Flow registrasi toko oleh superadmin (auto-buat user admin + aktifkan modul sesuai preset)
 
 ## Fase 2 — Fitur Paket 1 (Basic Cashbook & Sales) ✅
-- [ ] Migration: `pengeluaran`, `penjualan_sederhana`, `item_penjualan_sederhana`
+- [ ] Migration: `pengeluaran`, `penjualan_sederhana`, `item_penjualan_sederhana`, `kategori`, `pemasok`, `produk`
 - [ ] CRUD pengeluaran + upload struk
-- [ ] Form pencatatan penjualan ringkas + item dinamis
-- [ ] Halaman rekap harian/mingguan/bulanan + laba kotor sederhana
+- [ ] CRUD produk/kategori/pemasok (gated tier ≥ 1 — semua paket)
+- [ ] Form pencatatan penjualan ringkas: pilih produk dari master, qty, harga satuan, subtotal + harga_beli_snapshot
+- [ ] Halaman rekap harian/mingguan/bulanan + laba kotor sederhana (dari harga_beli_snapshot)
 
-## Fase 3 — Fitur Paket 2 (POS & Stock Management) ✅
-- [ ] Migration: `kategori`, `pemasok`, `produk`, `gudang` (default etalase), `stok_gudang`, `pergerakan_stok`, `transaksi`, `item_transaksi`
-- [ ] CRUD produk/kategori/pemasok (gated tier ≥ 2)
-- [ ] UI kasir: cari produk, keranjang, bayar, kembalian
+## Fase 3 — Fitur Modul POS & Stok (kasir_pos, stok_gudang, dll) ✅
+- [ ] Migration: `gudang` (default etalase saat modul `stok_gudang` diaktifkan), `stok_gudang`, `pergerakan_stok`, `transaksi`, `item_transaksi`
+- [ ] UI kasir POS (gate: `CekModul('kasir_pos')`): cari produk dari master, keranjang, bayar, kembalian — validasi sisa stok
 - [ ] Service `StokService`: deduct stok + tulis `pergerakan_stok` (DB transaction)
-- [ ] Stock alert di dashboard (produk < stok_minimum)
-- [ ] Stok opname/adjustment
-- [ ] Laporan laba per produk (pakai harga_beli_snapshot)
+- [ ] Stock alert di dashboard (gate: `CekModul('stock_alert')`) — `stok_minimum` tampil di form produk hanya jika modul `stok_gudang` aktif
+- [ ] Stok opname/adjustment (gate: `CekModul('stok_opname')`)
+- [ ] Laporan laba per produk (gate: `CekModul('laporan_hpp')`; pakai harga_beli_snapshot di item_transaksi)
 
 ## Fase 4 — Fitur Paket 3 (Advanced Inventory & Warehouse) ✅
 - [ ] CRUD gudang (etalase/gudang)

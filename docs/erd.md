@@ -10,8 +10,9 @@
 superadmin (pengguna.peran=superadmin, toko_id=NULL)
     └── mengelola ──> toko <── dimiliki oleh ── admin (pengguna.peran=admin)
                         │
-                        ├── paket (paket langganan tier 1-3)
-                        ├── addon <──> addon_toko (pivot aktivasi)
+                        ├── paket (preset/custom) <──> paket_modul <──> modul
+                        │                                              └──< ketergantungan_modul
+                        ├── modul_toko (modul aktif per toko) >── modul
                         ├── pengeluaran
                         ├── penjualan_sederhana ──< item_penjualan_sederhana
                         ├── transaksi ──< item_transaksi
@@ -37,41 +38,77 @@ superadmin (pengguna.peran=superadmin, toko_id=NULL)
 | nama | string | Nama toko |
 | slug | string, unique | Identifikasi URL/route |
 | paket_id | FK → paket | Paket aktif (tier 1-3) |
-| status | enum: coba_gratis, aktif, nonaktif | Status langganan |
+| status | enum: aktif, nonaktif | Status langganan |
 | garis_lintang | decimal, nullable | Koordinat lintang toko untuk geofencing absensi |
 | garis_bujur | decimal, nullable | Koordinat bujur toko |
 | radius_absensi | integer, default 100 | Radius geofencing (meter) |
 | langganan_berakhir_pada | timestamp, nullable | Masa berlaku langganan |
 | created_at / updated_at | timestamps | |
 
-### `paket` — Master Paket (dikelola superadmin)
+### `paket` — Master Paket / Preset (dikelola superadmin)
 
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | id | bigint PK | |
-| nama | string | Misal: "Basic Cashbook" |
-| tingkat | tinyint (1-3) | Level paket, dipakai feature gating (`CekPaket`) |
+| nama | string | Misal: "Paket 1 — Cashbook", "Custom Apotek Sejahtera" |
+| jenis | enum: preset_1, preset_2, preset_3, custom | `preset_*` = bundel standar platform; `custom` = disusun superadmin khusus per tenant |
 | harga | decimal | Harga per bulan |
 | deskripsi | text | |
 | aktif | boolean | |
 
-### `addon` — Master Add-on
+### `modul` — Master Modul Platform
 
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | id | bigint PK | |
-| kode | string, unique | `absensi`, `penggajian` |
-| nama | string | |
-| harga | decimal | |
-| aktif | boolean | |
+| kode | string, unique | Identifier: `master_produk`, `kasir_pos`, `absensi`, dll |
+| nama | string | Nama tampilan |
+| deskripsi | text | |
+| aktif | boolean | Aktif di platform (superadmin bisa disable global) |
 
-### `addon_toko` — Pivot aktivasi add-on per toko
+> **16 modul tersedia** (di-seed saat install):
+> `pengeluaran`, `master_produk`, `penjualan_ringkas`, `rekap_keuangan`,
+> `stok_gudang`, `kasir_pos`, `stock_alert`, `stok_opname`, `laporan_hpp`,
+> `multi_gudang`, `barang_masuk`, `transfer_gudang`, `kartu_stok`,
+> `karyawan`, `absensi`, `payroll`
+
+### `ketergantungan_modul` — Dependency Graph Antar Modul
+
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| modul_id | FK → modul | Modul yang memiliki ketergantungan |
+| requires_modul_id | FK → modul | Modul yang wajib aktif terlebih dahulu |
+| (composite PK) | | modul_id + requires_modul_id |
+
+> Dependency yang didefinisikan:
+> - `penjualan_ringkas` → `master_produk`
+> - `rekap_keuangan` → `penjualan_ringkas`
+> - `stok_gudang` → `master_produk`
+> - `kasir_pos` → `master_produk`, `stok_gudang`
+> - `stock_alert`, `stok_opname`, `barang_masuk`, `kartu_stok` → `stok_gudang`
+> - `multi_gudang` → `stok_gudang`
+> - `transfer_gudang` → `multi_gudang`
+> - `laporan_hpp` → `kasir_pos`
+> - `absensi` → `karyawan`
+> - `payroll` → `absensi`
+
+### `paket_modul` — Pivot Modul dalam Paket/Preset
 
 | Kolom | Keterangan |
 |---|---|
-| toko_id + addon_id | composite PK |
+| paket_id + modul_id | composite PK |
+
+> Mendefinisikan modul apa yang termasuk dalam preset atau paket custom.
+> Saat preset di-assign ke toko, semua modul di sini disinkronkan ke `modul_toko`.
+
+### `modul_toko` — Modul Aktif per Toko
+
+| Kolom | Keterangan |
+|---|---|
+| toko_id + modul_id | composite PK |
 | aktif | boolean |
 | diaktifkan_pada | timestamp |
+| berakhir_pada | timestamp nullable — masa berlaku modul; NULL = belum ada batas |
 
 ### `pengguna` — Semua pengguna login
 
@@ -93,7 +130,7 @@ id, toko_id, nama, created_at/updated_at.
 
 id, toko_id, nama, telepon, alamat, created_at/updated_at.
 
-### `produk` — Master barang (Paket 2+)
+### `produk` — Master barang (Semua Paket)
 
 | Kolom | Tipe | Keterangan |
 |---|---|---|
@@ -104,7 +141,7 @@ id, toko_id, nama, telepon, alamat, created_at/updated_at.
 | nama | string | |
 | harga_beli | decimal | Harga beli |
 | harga_jual | decimal | Harga jual |
-| stok_minimum | integer | Ambang alert stok menipis |
+| stok_minimum | integer | Ambang alert stok menipis — **disembunyikan di form Paket 1** (tidak ada `stok_gudang`) |
 
 > Stok **tidak** disimpan di tabel ini — dikelola via `stok_gudang`.
 
@@ -116,7 +153,7 @@ id, toko_id, nama, telepon, alamat, created_at/updated_at.
 | nama | string | Misal: "Etalase", "Gudang Utama" |
 | jenis | enum: etalase, gudang | |
 
-Tenant Paket 1-2 otomatis punya 1 gudang default bertipe `etalase`.
+Tenant Paket 2+ mendapat 1 gudang default bertipe `etalase` secara otomatis saat pertama kali diaktifkan. Paket 1 memiliki master produk tetapi tidak memiliki `stok_gudang` — manajemen stok belum aktif di level ini.
 
 ### `stok_gudang` — Stok per produk per gudang
 
@@ -159,8 +196,10 @@ id, toko_id, pengguna_id, tanggal_penjualan, total, catatan, created_at/updated_
 | Kolom | Keterangan |
 |---|---|
 | id, toko_id, penjualan_sederhana_id | |
-| nama_barang | Nama barang bebas (tanpa master produk) |
+| produk_id | FK → produk (wajib; dipilih dari master produk) |
+| nama_produk | Snapshot nama produk saat transaksi |
 | jumlah, harga_satuan, subtotal | |
+| harga_beli_snapshot | Snapshot harga beli untuk estimasi laba kotor Paket 1 |
 
 ### `transaksi` — Transaksi kasir POS (Paket 2+)
 
@@ -187,7 +226,7 @@ id, toko_id, pengguna_id, tanggal_penjualan, total, catatan, created_at/updated_
 | Kolom | Keterangan |
 |---|---|
 | id, toko_id | |
-| pengguna_id | FK nullable — bisa karyawan tanpa akses web |
+| pengguna_id | FK (wajib) — karyawan harus punya akun login untuk absensi mandiri |
 | kode_karyawan, posisi | |
 | skema_gaji | enum: harian, bulanan |
 | tarif_harian | Tarif per hari (jika harian) |
@@ -227,3 +266,21 @@ id, toko_id, pengguna_id, tanggal_penjualan, total, catatan, created_at/updated_
 | jenis | enum: tunjangan, potongan |
 | nama | Makan, transport, kasbon, telat, dll |
 | nominal | decimal |
+
+---
+
+### `pembayaran` — Riwayat Pembayaran/Tagihan (Billing)
+
+| Kolom | Keterangan |
+|---|---|
+| id, toko_id | |
+| jenis | enum: upgrade_paket, aktivasi_addon |
+| paket_id | FK → paket nullable (diisi saat jenis = upgrade_paket) |
+| addon_id | FK → addon nullable (diisi saat jenis = aktivasi_addon) |
+| jumlah | decimal — nominal yang dibayar (rupiah) |
+| bukti_transfer | string — path file upload bukti transfer |
+| status | enum: menunggu, disetujui, ditolak |
+| catatan_penolakan | text nullable — wajib diisi superadmin saat menolak |
+| diverifikasi_oleh | FK → pengguna nullable — superadmin yang memverifikasi |
+| diverifikasi_pada | timestamp nullable |
+| created_at / updated_at | timestamps |
