@@ -28,4 +28,9 @@ class Gudang extends Model
     {
         return $this->hasMany(PergerakanStok::class);
     }
+
+    public function stokProduk(int $produkId): int
+    {
+        return (int) $this->stokGudang()->where('produk_id', $produkId)->value('jumlah');
+    }
 }

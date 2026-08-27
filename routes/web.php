@@ -119,7 +119,7 @@ Route::middleware(['auth', 'verified', 'konteks_toko'])
         // ── Modul: stok_opname ──────────────────────────────────
         Route::middleware('modul:stok_opname')->group(function () {
             Route::get('stok/opname', [StokController::class, 'opname'])->name('stok.opname');
-            Route::post('stok/opname', [StokController::class, 'simpanOpname'])->name('stok.opname.store');
+            Route::post('stok/opname', [StokController::class, 'simpanOpname'])->name('stok.opname.simpan');
         });
 
         // ── Modul: laporan_hpp ──────────────────────────────────
@@ -147,7 +147,7 @@ Route::middleware(['auth', 'verified', 'konteks_toko'])
         // ── Modul: kartu_stok ───────────────────────────────────
         Route::middleware('modul:kartu_stok')->group(function () {
             Route::get('stok/kartu', [StokController::class, 'kartu'])->name('stok.kartu');
-            Route::get('stok/kartu/{produk}', [StokController::class, 'kartuProduk'])->name('stok.kartu.produk');
+            Route::get('stok/kartu/{produk}', [StokController::class, 'kartuProduk'])->name('stok.kartu.detail');
         });
 
         // ── Modul: karyawan ─────────────────────────────────────

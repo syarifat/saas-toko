@@ -2,63 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pemasok;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PemasokController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        //
+        $pemasoks = Pemasok::withCount('produk')->latest()->paginate(15);
+
+        return view('tenant.pemasok.index', compact('pemasoks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('tenant.pemasok.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'telepon' => ['nullable', 'string', 'max:30'],
+            'alamat' => ['nullable', 'string'],
+        ]);
+
+        Pemasok::create([
+            'toko_id' => $request->user()->toko_id,
+            'nama' => $validated['nama'],
+            'telepon' => $validated['telepon'] ?? null,
+            'alamat' => $validated['alamat'] ?? null,
+        ]);
+
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Pemasok $pemasok): View
     {
-        //
+        return view('tenant.pemasok.edit', compact('pemasok'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Pemasok $pemasok): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'telepon' => ['nullable', 'string', 'max:30'],
+            'alamat' => ['nullable', 'string'],
+        ]);
+
+        $pemasok->update($validated);
+
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok berhasil diperbarui.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Pemasok $pemasok): RedirectResponse
     {
-        //
-    }
+        $pemasok->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok berhasil dihapus.');
     }
 }
