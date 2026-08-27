@@ -134,4 +134,35 @@ class TenantKasirPosTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertDatabaseCount('transaksi', 0);
     }
+
+    public function test_transaksi_kasir_pos_dengan_metode_qris(): void
+    {
+        $cartData = [
+            [
+                'id' => $this->produk->id,
+                'qty' => 2,
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post(route('kasir.store'), [
+            'gudang_id' => $this->gudang->id,
+            'cart_data' => json_encode($cartData),
+            'diskon' => 0,
+            'metode_pembayaran' => 'qris',
+            'jumlah_bayar' => 10000,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('transaksi', [
+            'toko_id' => $this->toko->id,
+            'total' => 10000,
+            'metode_pembayaran' => 'qris',
+        ]);
+    }
+
+    public function test_riwayat_transaksi_kasir_dapat_dibuka_dan_difilter(): void
+    {
+        $response = $this->actingAs($this->user)->get(route('kasir.riwayat'));
+        $response->assertOk();
+    }
 }
