@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Gudang;
+use App\Models\Pengguna;
+use App\Models\Toko;
 use App\Models\Transaksi;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +21,9 @@ class TransaksiFactory extends Factory
     public function definition(): array
     {
         return [
-            'pengguna_id' => User::factory(),
+            'toko_id' => Toko::factory(),
+            'pengguna_id' => Pengguna::factory(),
+            'gudang_id' => Gudang::factory(),
             'tanggal_transaksi' => fake()->date(),
             'subtotal' => 0,
             'diskon' => 0,

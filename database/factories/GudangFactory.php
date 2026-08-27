@@ -2,15 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Pengeluaran;
-use App\Models\Pengguna;
+use App\Models\Gudang;
 use App\Models\Toko;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Pengeluaran>
+ * @extends Factory<Gudang>
  */
-class PengeluaranFactory extends Factory
+class GudangFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,10 +20,8 @@ class PengeluaranFactory extends Factory
     {
         return [
             'toko_id' => Toko::factory(),
-            'pengguna_id' => Pengguna::factory(),
-            'tanggal_pengeluaran' => fake()->date(),
-            'keterangan' => fake()->words(3, true),
-            'nominal' => fake()->numberBetween(1000, 1000000),
+            'nama' => 'Etalase Utama',
+            'jenis' => 'etalase',
         ];
     }
 }

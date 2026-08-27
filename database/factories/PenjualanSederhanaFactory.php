@@ -3,8 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\ItemPenjualanSederhana;
+use App\Models\Pengguna;
 use App\Models\PenjualanSederhana;
-use App\Models\User;
+use App\Models\Produk;
+use App\Models\Toko;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +22,8 @@ class PenjualanSederhanaFactory extends Factory
     public function definition(): array
     {
         return [
-            'pengguna_id' => User::factory(),
+            'toko_id' => Toko::factory(),
+            'pengguna_id' => Pengguna::factory(),
             'tanggal_penjualan' => fake()->date(),
             'total' => 0,
             'catatan' => null,
@@ -34,18 +37,21 @@ class PenjualanSederhanaFactory extends Factory
             $jumlahItem = fake()->numberBetween(1, 3);
 
             for ($i = 0; $i < $jumlahItem; $i++) {
+                $produk = Produk::factory()->create(['toko_id' => $penjualan->toko_id]);
                 $jumlah = fake()->numberBetween(1, 5);
-                $harga = fake()->numberBetween(1000, 50000);
+                $harga = $produk->harga_jual;
                 $subtotal = $jumlah * $harga;
                 $total += $subtotal;
 
                 ItemPenjualanSederhana::create([
                     'toko_id' => $penjualan->toko_id,
                     'penjualan_sederhana_id' => $penjualan->id,
-                    'nama_barang' => fake()->word(),
+                    'produk_id' => $produk->id,
+                    'nama_produk' => $produk->nama,
                     'jumlah' => $jumlah,
                     'harga_satuan' => $harga,
                     'subtotal' => $subtotal,
+                    'harga_beli_snapshot' => $produk->harga_beli,
                 ]);
             }
 

@@ -19,7 +19,7 @@ class PaketFactory extends Factory
     {
         return [
             'nama' => fake()->unique()->words(3, true),
-            'tingkat' => fake()->unique()->numberBetween(1, 100),
+            'jenis' => fake()->randomElement(['preset_1', 'preset_2', 'preset_3', 'custom']),
             'harga' => fake()->randomFloat(2, 0, 500000),
             'deskripsi' => fake()->sentence(),
             'aktif' => true,

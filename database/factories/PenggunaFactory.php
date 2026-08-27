@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 /**
  * @extends Factory<Pengguna>
  */
-class UserFactory extends Factory
+class PenggunaFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

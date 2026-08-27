@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Produk;
+use App\Models\Toko;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class ProdukFactory extends Factory
     public function definition(): array
     {
         return [
+            'toko_id' => Toko::factory(),
             'sku' => fake()->unique()->regexify('[A-Z]{3}[0-9]{4}'),
             'nama' => fake()->words(2, true),
             'harga_beli' => fake()->numberBetween(1000, 50000),
