@@ -48,7 +48,7 @@
                     @forelse($pembayarans as $p)
                         <tr class="hover:bg-slate-50 transition">
                             <td class="px-6 py-4 text-xs text-slate-500">
-                                {{ $p->created_at->format('d M Y, H:i') }}
+                                {{ $p->created_at->format('d M Y, H:i') }} WIB
                             </td>
                             <td class="px-6 py-4 font-semibold text-slate-900">
                                 <a href="{{ route('superadmin.toko.show', $p->toko) }}" class="hover:text-indigo-600">{{ $p->toko->nama ?? 'Toko' }}</a>
@@ -86,15 +86,15 @@
                             </td>
                             <td class="px-6 py-4 text-right space-x-2">
                                 @if($p->status === 'menunggu')
-                                    <form method="POST" action="{{ route('superadmin.verifikasi.setujui', $p) }}" class="inline">
+                                    <form method="POST" action="{{ route('superadmin.verifikasi.setujui', $p) }}" class="inline" data-confirm="Setujui pembayaran ini? Layanan toko akan otomatis diperbarui dan diperpanjang.">
                                         @csrf
-                                        <button type="submit" onclick="return confirm('Setujui pembayaran ini? Layanan toko akan otomatis diperbarui.')"
+                                        <button type="submit"
                                                 class="px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition">
                                             Setujui ✓
                                         </button>
                                     </form>
 
-                                    <!-- Tombol Tolak memicu prompt catatan -->
+                                    <!-- Tombol Tolak memicu SweetAlert prompt catatan -->
                                     <button type="button" onclick="tolakPembayaran({{ $p->id }})"
                                             class="px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition">
                                         Tolak ✗
@@ -127,11 +127,31 @@
 
 <script>
 function tolakPembayaran(id) {
-    const alasan = prompt('Masukkan alasan penolakan pembayaran:');
-    if (alasan && alasan.trim() !== '') {
-        document.getElementById(`input-catatan-${id}`).value = alasan.trim();
-        document.getElementById(`form-tolak-${id}`).submit();
-    }
+    Swal.fire({
+        title: 'Tolak Pembayaran',
+        text: 'Masukkan alasan penolakan pembayaran langganan ini:',
+        input: 'textarea',
+        inputPlaceholder: 'Contoh: Bukti transfer tidak valid atau nominal tidak sesuai...',
+        inputAttributes: {
+            'aria-label': 'Alasan penolakan'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Tolak Pembayaran',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        reverseButtons: true,
+        inputValidator: (value) => {
+            if (!value || value.trim() === '') {
+                return 'Alasan penolakan wajib diisi!';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            document.getElementById(`input-catatan-${id}`).value = result.value.trim();
+            document.getElementById(`form-tolak-${id}`).submit();
+        }
+    });
 }
 </script>
 @endsection

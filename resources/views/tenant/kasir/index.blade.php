@@ -1,11 +1,11 @@
 @extends('layouts.tenant')
 
 @section('content')
-<div class="h-[calc(100vh-8rem)] flex flex-col lg:flex-row gap-6">
+<div class="flex flex-col lg:flex-row gap-6 items-start pb-8">
     <!-- Left Panel: Product Catalog (60-65%) -->
-    <div class="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-1 w-full bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col min-w-0">
         <!-- Top Toolbar: Search, Category & Warehouse -->
-        <div class="p-4 border-b border-slate-100 space-y-3 shrink-0">
+        <div class="p-4 border-b border-slate-100 space-y-3 shrink-0 bg-white rounded-t-2xl">
             <div class="flex items-center gap-3">
                 <div class="relative flex-1">
                     <svg class="w-4 h-4 absolute left-3.5 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Products Grid -->
-        <div class="flex-1 p-4 overflow-y-auto" id="pos-product-grid">
+        <div class="p-4" id="pos-product-grid">
             <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3.5">
                 @foreach($produks as $produk)
                     @php
@@ -72,59 +72,59 @@
     </div>
 
     <!-- Right Panel: Cart & Payment (35-40%) -->
-    <div class="w-full lg:w-[420px] bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col shrink-0 overflow-hidden">
+    <div class="w-full lg:w-[420px] xl:w-[440px] bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col shrink-0 lg:sticky lg:top-4">
         <!-- Cart Header -->
-        <div class="p-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50">
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50 rounded-t-2xl">
             <div>
                 <h3 class="font-bold text-sm text-slate-800">Keranjang Kasir</h3>
                 <p class="text-xs text-slate-500" id="cart-item-count">0 item dipilih</p>
             </div>
-            <button type="button" onclick="clearCart()" class="text-xs text-rose-600 hover:text-rose-800 font-semibold">Kosongkan</button>
+            <button type="button" onclick="clearCart()" class="text-xs text-rose-600 hover:text-rose-800 font-semibold px-2 py-1 hover:bg-rose-50 rounded-lg transition">Kosongkan</button>
         </div>
 
-        <!-- Cart Items List -->
-        <div class="flex-1 p-4 overflow-y-auto space-y-2.5 divide-y divide-slate-100" id="cart-items-container">
-            <div id="empty-cart-notice" class="h-full flex flex-col items-center justify-center text-slate-400 py-16 text-center">
-                <svg class="w-12 h-12 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+        <!-- Cart Items List (Dedicated Scrollable Container) -->
+        <div class="max-h-72 min-h-[140px] overflow-y-auto p-3.5 space-y-2 sidebar-scroll bg-slate-50/40" id="cart-items-container">
+            <div id="empty-cart-notice" class="min-h-[120px] flex flex-col items-center justify-center text-slate-400 py-8 text-center">
+                <svg class="w-10 h-10 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                 <p class="text-xs font-semibold">Keranjang masih kosong</p>
-                <p class="text-[11px]">Klik produk di sebelah kiri untuk menambahkan ke keranjang.</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Klik produk di sebelah kiri untuk menambahkan ke keranjang.</p>
             </div>
         </div>
 
         <!-- Payment & Summary Footer -->
-        <form method="POST" action="{{ route('kasir.store') }}" id="pos-checkout-form" class="p-4 border-t border-slate-200 bg-slate-50/70 space-y-3 shrink-0">
+        <form method="POST" action="{{ route('kasir.store') }}" id="pos-checkout-form" class="p-4 border-t border-slate-200 bg-white rounded-b-2xl space-y-3.5 shrink-0">
             @csrf
             <input type="hidden" name="gudang_id" id="form-gudang-id">
             <input type="hidden" name="cart_data" id="form-cart-data">
 
             <!-- Subtotal & Diskon -->
-            <div class="space-y-1.5 text-xs text-slate-600">
-                <div class="flex justify-between">
-                    <span>Subtotal:</span>
+            <div class="space-y-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div class="flex justify-between items-center">
+                    <span class="font-medium">Subtotal:</span>
                     <span class="font-bold text-slate-900" id="display-subtotal">Rp 0</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
-                    <span>Diskon (Rp):</span>
+                    <span class="font-medium">Diskon (Rp):</span>
                     <input type="number" name="diskon" id="input-diskon" value="0" min="0" step="500"
                            class="w-28 text-right text-xs py-1 px-2 border-slate-200 rounded-lg focus:ring-indigo-500" oninput="calculateTotal()">
                 </div>
-                <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
+                <div class="flex justify-between items-center text-sm font-extrabold text-slate-900 pt-2 border-t border-slate-200">
                     <span>Total Tagihan:</span>
-                    <span class="text-indigo-600" id="display-total">Rp 0</span>
+                    <span class="text-base text-indigo-600 font-extrabold" id="display-total">Rp 0</span>
                 </div>
             </div>
 
             <!-- Metode Pembayaran -->
-            <div class="pt-2 border-t border-slate-200">
-                <label class="block text-[11px] font-bold text-slate-700 mb-1.5 uppercase">Metode Pembayaran</label>
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Metode Pembayaran</label>
                 <div class="grid grid-cols-3 gap-2 text-xs">
-                    <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700">
+                    <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700 transition">
                         <input type="radio" name="metode_pembayaran" value="tunai" checked class="hidden" onchange="toggleMetode('tunai')"> Tunai
                     </label>
-                    <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700">
+                    <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700 transition">
                         <input type="radio" name="metode_pembayaran" value="qris" class="hidden" onchange="toggleMetode('qris')"> QRIS
                     </label>
-                    <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700">
+                    <label class="flex items-center justify-center p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer font-semibold has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-600 has-[:checked]:text-indigo-700 transition">
                         <input type="radio" name="metode_pembayaran" value="transfer" class="hidden" onchange="toggleMetode('transfer')"> Transfer
                     </label>
                 </div>
@@ -132,21 +132,21 @@
 
             <!-- Section Tunai: Quick Cash Presets & Kembalian -->
             <div id="section-tunai" class="space-y-2">
-                <div class="flex items-center gap-1.5 overflow-x-auto text-[11px]">
-                    <button type="button" onclick="setCash('pas')" class="px-2 py-1 bg-white border border-slate-200 rounded font-semibold text-slate-700 hover:bg-slate-100">Uang Pas</button>
-                    <button type="button" onclick="setCash(20000)" class="px-2 py-1 bg-white border border-slate-200 rounded font-semibold text-slate-700 hover:bg-slate-100">20k</button>
-                    <button type="button" onclick="setCash(50000)" class="px-2 py-1 bg-white border border-slate-200 rounded font-semibold text-slate-700 hover:bg-slate-100">50k</button>
-                    <button type="button" onclick="setCash(100000)" class="px-2 py-1 bg-white border border-slate-200 rounded font-semibold text-slate-700 hover:bg-slate-100">100k</button>
+                <div class="flex items-center gap-1.5 overflow-x-auto text-[11px] pb-0.5">
+                    <button type="button" onclick="setCash('pas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-semibold text-slate-700 transition shrink-0">Uang Pas</button>
+                    <button type="button" onclick="setCash(20000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-semibold text-slate-700 transition shrink-0">20k</button>
+                    <button type="button" onclick="setCash(50000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-semibold text-slate-700 transition shrink-0">50k</button>
+                    <button type="button" onclick="setCash(100000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-semibold text-slate-700 transition shrink-0">100k</button>
                 </div>
                 <div class="grid grid-cols-2 gap-2 text-xs">
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jumlah Bayar (Rp)</label>
                         <input type="number" name="jumlah_bayar" id="input-bayar" value="0" min="0" step="500" required
-                               class="w-full text-sm font-bold text-slate-900 border-slate-200 rounded-lg focus:ring-indigo-500" oninput="calculateKembalian()">
+                               class="w-full text-sm font-bold text-slate-900 border-slate-200 rounded-xl focus:ring-indigo-500" oninput="calculateKembalian()">
                     </div>
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Kembalian</label>
-                        <div class="w-full text-sm font-extrabold text-emerald-600 bg-slate-100 p-2 rounded-lg truncate" id="display-kembalian">
+                        <div class="w-full text-sm font-extrabold text-emerald-600 bg-slate-100 p-2 rounded-xl truncate" id="display-kembalian">
                             Rp 0
                         </div>
                     </div>
@@ -155,7 +155,7 @@
 
             <!-- Submit Button -->
             <button type="button" onclick="submitPOS()" id="btn-submit-pos" disabled
-                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 active:scale-[0.99]">
                 <span>Proses Transaksi & Simpan</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
@@ -178,14 +178,14 @@ function addToCart(el) {
     const stok = parseInt(el.dataset.stok);
 
     if (stok <= 0) {
-        alert(`Stok produk [${nama}] habis.`);
+        Toast.fire({ icon: 'warning', title: `Stok produk [${nama}] habis.` });
         return;
     }
 
     const existing = cart.find(item => item.id === id);
     if (existing) {
         if (existing.qty + 1 > stok) {
-            alert(`Jumlah tidak dapat melebihi sisa stok (${stok}).`);
+            Toast.fire({ icon: 'warning', title: `Jumlah tidak dapat melebihi sisa stok (${stok}).` });
             return;
         }
         existing.qty += 1;
@@ -204,7 +204,7 @@ function updateQty(id, delta) {
     if (newQty <= 0) {
         cart = cart.filter(i => i.id !== id);
     } else if (newQty > item.stok) {
-        alert(`Jumlah tidak dapat melebihi sisa stok (${item.stok}).`);
+        Toast.fire({ icon: 'warning', title: `Jumlah tidak dapat melebihi sisa stok (${item.stok}).` });
         return;
     } else {
         item.qty = newQty;
@@ -229,10 +229,10 @@ function renderCart() {
 
     if (cart.length === 0) {
         container.innerHTML = `
-            <div id="empty-cart-notice" class="h-full flex flex-col items-center justify-center text-slate-400 py-16 text-center">
-                <svg class="w-12 h-12 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+            <div id="empty-cart-notice" class="min-h-[120px] flex flex-col items-center justify-center text-slate-400 py-8 text-center">
+                <svg class="w-10 h-10 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                 <p class="text-xs font-semibold">Keranjang masih kosong</p>
-                <p class="text-[11px]">Klik produk di sebelah kiri untuk menambahkan ke keranjang.</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Klik produk di sebelah kiri untuk menambahkan ke keranjang.</p>
             </div>
         `;
         countEl.innerText = '0 item dipilih';
@@ -249,16 +249,18 @@ function renderCart() {
         totalItems += item.qty;
         const subtotal = item.qty * item.harga;
         html += `
-            <div class="pt-2.5 first:pt-0 flex items-center justify-between gap-3 text-xs">
+            <div class="p-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 shadow-xs flex items-center justify-between gap-2.5 text-xs transition">
                 <div class="min-w-0 flex-1">
-                    <p class="font-bold text-slate-900 truncate">${item.nama}</p>
-                    <p class="text-[11px] text-slate-500">${formatRupiah(item.harga)} x ${item.qty} = <span class="font-bold text-slate-800">${formatRupiah(subtotal)}</span></p>
+                    <p class="font-bold text-slate-900 truncate leading-tight">${item.nama}</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">${formatRupiah(item.harga)} × ${item.qty} = <span class="font-bold text-indigo-600">${formatRupiah(subtotal)}</span></p>
                 </div>
                 <div class="flex items-center gap-1 shrink-0">
-                    <button type="button" onclick="updateQty(${item.id}, -1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">-</button>
-                    <span class="w-7 text-center font-bold text-slate-900">${item.qty}</span>
-                    <button type="button" onclick="updateQty(${item.id}, 1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center">+</button>
-                    <button type="button" onclick="removeItem(${item.id})" class="ml-1 text-rose-500 hover:text-rose-700 p-1">✕</button>
+                    <button type="button" onclick="updateQty(${item.id}, -1)" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center transition active:scale-95 text-xs">-</button>
+                    <span class="w-6 text-center font-extrabold text-slate-900 text-xs">${item.qty}</span>
+                    <button type="button" onclick="updateQty(${item.id}, 1)" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 flex items-center justify-center transition active:scale-95 text-xs">+</button>
+                    <button type="button" onclick="removeItem(${item.id})" class="ml-1 text-slate-400 hover:text-rose-600 p-1 transition" title="Hapus">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
                 </div>
             </div>
         `;
@@ -283,15 +285,18 @@ function calculateTotal() {
 function toggleMetode(metode) {
     const secTunai = document.getElementById('section-tunai');
     const inputBayar = document.getElementById('input-bayar');
+
     if (metode === 'tunai') {
-        secTunai.style.display = 'block';
+        secTunai.classList.remove('hidden');
+        inputBayar.required = true;
     } else {
-        secTunai.style.display = 'none';
+        secTunai.classList.add('hidden');
+        inputBayar.required = false;
+        // Non-tunai langsung dianggap lunas
         const subtotal = cart.reduce((acc, i) => acc + (i.qty * i.harga), 0);
         const diskon = parseFloat(document.getElementById('input-diskon').value) || 0;
         inputBayar.value = Math.max(0, subtotal - diskon);
     }
-    calculateKembalian();
 }
 
 function setCash(val) {
@@ -312,8 +317,8 @@ function calculateKembalian() {
     const diskon = parseFloat(document.getElementById('input-diskon').value) || 0;
     const total = Math.max(0, subtotal - diskon);
     const bayar = parseFloat(document.getElementById('input-bayar').value) || 0;
-    const kembalian = Math.max(0, bayar - total);
 
+    const kembalian = Math.max(0, bayar - total);
     document.getElementById('display-kembalian').innerText = formatRupiah(kembalian);
 }
 
@@ -327,7 +332,13 @@ function submitPOS() {
 
     const metode = document.querySelector('input[name="metode_pembayaran"]:checked').value;
     if (metode === 'tunai' && bayar < total) {
-        alert('Jumlah bayar tunai kurang dari total tagihan.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Nominal Bayar Kurang',
+            text: `Jumlah bayar tunai (Rp ${bayar.toLocaleString('id-ID')}) kurang dari total tagihan (Rp ${total.toLocaleString('id-ID')}).`,
+            confirmButtonColor: '#4f46e5',
+            confirmButtonText: 'Sesuaikan'
+        });
         return;
     }
 
@@ -358,9 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchCat = currentCat === 'all' || cat === currentCat;
 
             if (matchSearch && matchCat) {
-                card.style.display = 'flex';
+                card.classList.remove('hidden');
             } else {
-                card.style.display = 'none';
+                card.classList.add('hidden');
             }
         });
     }
@@ -373,8 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.classList.remove('bg-indigo-600', 'text-white');
                 b.classList.add('bg-slate-100', 'text-slate-700');
             });
-            btn.classList.remove('bg-slate-100', 'text-slate-700');
             btn.classList.add('bg-indigo-600', 'text-white');
+            btn.classList.remove('bg-slate-100', 'text-slate-700');
 
             currentCat = btn.dataset.cat;
             filterCards();

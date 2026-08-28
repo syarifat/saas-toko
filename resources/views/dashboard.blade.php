@@ -83,7 +83,7 @@
                         <div class="px-6 py-3 flex items-center justify-between text-xs hover:bg-slate-50">
                             <div>
                                 <p class="font-bold text-slate-900">#{{ $trx->id }} • Rp {{ number_format($trx->total, 0, ',', '.') }}</p>
-                                <p class="text-[11px] text-slate-500">{{ $trx->created_at->format('d M Y H:i') }} • Kasir: {{ $trx->pengguna->nama ?? '-' }}</p>
+                                <p class="text-[11px] text-slate-500">{{ $trx->created_at->format('d M Y H:i') }} WIB • Kasir: {{ $trx->pengguna->nama ?? '-' }}</p>
                             </div>
                             <span class="px-2 py-0.5 rounded uppercase font-bold text-[10px] bg-slate-100 text-slate-700">{{ $trx->metode_pembayaran }}</span>
                         </div>

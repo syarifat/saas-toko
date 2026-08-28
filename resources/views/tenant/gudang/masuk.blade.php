@@ -65,7 +65,7 @@
             <tbody class="divide-y divide-slate-100">
                 @forelse($riwayat as $r)
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-xs text-slate-500">{{ $r->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-500">{{ $r->created_at->format('d/m/Y H:i') }} WIB</td>
                         <td class="px-6 py-4 font-bold text-slate-900">{{ $r->produk->nama ?? '-' }}</td>
                         <td class="px-6 py-4 text-xs">{{ $r->gudang->nama ?? '-' }}</td>
                         <td class="px-6 py-4 text-center font-black text-emerald-700 text-xs">+{{ $r->jumlah }} unit</td>

@@ -39,7 +39,7 @@
                         <td class="px-6 py-4 font-bold text-slate-900">{{ $cat->nama }}</td>
                         <td class="px-6 py-4 text-xs text-slate-500">{{ $cat->produk_count }} produk</td>
                         <td class="px-6 py-4 text-right">
-                            <form method="POST" action="{{ route('kategori.destroy', $cat) }}" class="inline" onsubmit="return confirm('Hapus kategori ini?')">
+                            <form method="POST" action="{{ route('kategori.destroy', $cat) }}" class="inline" data-confirm="Yakin ingin menghapus kategori '{{ $cat->nama }}'?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-xs text-rose-600 hover:text-rose-800 font-semibold">Hapus</button>

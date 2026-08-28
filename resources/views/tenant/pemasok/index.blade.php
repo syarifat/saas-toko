@@ -52,7 +52,7 @@
                         <td class="px-6 py-4 text-xs text-slate-500">{{ $p->alamat ?? '-' }}</td>
                         <td class="px-6 py-4 text-xs">{{ $p->produk_count }} item</td>
                         <td class="px-6 py-4 text-right">
-                            <form method="POST" action="{{ route('pemasok.destroy', $p) }}" class="inline" onsubmit="return confirm('Hapus pemasok ini?')">
+                            <form method="POST" action="{{ route('pemasok.destroy', $p) }}" class="inline" data-confirm="Yakin ingin menghapus pemasok '{{ $p->nama }}'?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-xs text-rose-600 hover:text-rose-800 font-semibold">Hapus</button>

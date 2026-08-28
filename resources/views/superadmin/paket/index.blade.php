@@ -55,7 +55,7 @@
                 <div class="pt-6 border-t border-slate-100 mt-6 flex items-center justify-between">
                     <a href="{{ route('superadmin.paket.edit', $paket) }}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">Edit Paket & Modul →</a>
                     @if($paket->toko_count === 0 && !str_starts_with($paket->jenis, 'preset'))
-                        <form method="POST" action="{{ route('superadmin.paket.destroy', $paket) }}" onsubmit="return confirm('Hapus paket ini?')">
+                        <form method="POST" action="{{ route('superadmin.paket.destroy', $paket) }}" data-confirm="Yakin ingin menghapus paket ini?">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-xs text-rose-600 hover:text-rose-800">Hapus</button>

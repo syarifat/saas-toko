@@ -54,7 +54,7 @@
                         </td>
                         <td class="px-6 py-4 text-xs text-slate-600">{{ $g->stok_gudang_count }} jenis produk</td>
                         <td class="px-6 py-4 text-right">
-                            <form method="POST" action="{{ route('gudang.destroy', $g) }}" class="inline" onsubmit="return confirm('Hapus gudang ini?')">
+                            <form method="POST" action="{{ route('gudang.destroy', $g) }}" class="inline" data-confirm="Yakin ingin menghapus gudang '{{ $g->nama }}'?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-xs text-rose-600 hover:text-rose-800 font-semibold">Hapus</button>

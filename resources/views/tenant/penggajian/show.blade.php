@@ -23,9 +23,9 @@
                 </span>
             </div>
             @if($penggajian->status === 'draf')
-                <form method="POST" action="{{ route('penggajian.bayar', $penggajian) }}">
+                <form method="POST" action="{{ route('penggajian.bayar', $penggajian) }}" data-confirm="Tandai gaji ini sudah dibayarkan lunas?">
                     @csrf
-                    <button type="submit" onclick="return confirm('Tandai gaji ini sudah dibayarkan lunas?')"
+                    <button type="submit"
                             class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                         ✓ Bayar & Lunaskan Gaji
                     </button>

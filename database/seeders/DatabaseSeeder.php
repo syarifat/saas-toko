@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             KetergantunganModulSeeder::class,
             PaketSeeder::class,
             SuperadminSeeder::class,
+            DemoPenggunaSeeder::class,
         ]);
     }
 }

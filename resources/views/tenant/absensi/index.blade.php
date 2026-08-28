@@ -5,7 +5,7 @@
     <!-- Header Clock Card -->
     <div class="bg-gradient-to-br from-indigo-700 to-indigo-900 text-white p-6 rounded-2xl shadow-md text-center space-y-2">
         <p class="text-xs font-semibold uppercase tracking-widest text-indigo-200" id="live-date">{{ now()->translatedFormat('l, d F Y') }}</p>
-        <h2 class="text-4xl font-extrabold tracking-tight font-mono" id="live-clock">{{ now()->format('H:i:s') }}</h2>
+        <h2 class="text-4xl font-extrabold tracking-tight font-mono" id="live-clock">{{ now()->format('H:i:s') }} WIB</h2>
         <p class="text-xs text-indigo-200">Karyawan: <span class="font-bold text-white">{{ auth()->user()->nama }}</span> ({{ auth()->user()->karyawan->kode_karyawan ?? 'KRJ' }})</p>
     </div>
 
@@ -105,7 +105,7 @@ setInterval(() => {
     const now = new Date();
     const clockEl = document.getElementById('live-clock');
     if (clockEl) {
-        clockEl.innerText = now.toTimeString().split(' ')[0];
+        clockEl.innerText = now.toTimeString().split(' ')[0] + ' WIB';
     }
 }, 1000);
 

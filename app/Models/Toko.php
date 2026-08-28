@@ -7,6 +7,7 @@ use Database\Factories\TokoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Toko extends Model
@@ -50,6 +51,12 @@ class Toko extends Model
     public function modulToko(): HasMany
     {
         return $this->hasMany(ModulToko::class);
+    }
+
+    public function modul(): BelongsToMany
+    {
+        return $this->belongsToMany(Modul::class, 'modul_toko', 'toko_id', 'modul_id')
+            ->withPivot(['aktif', 'diaktifkan_pada', 'berakhir_pada']);
     }
 
     public function pembayaran(): HasMany

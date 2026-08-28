@@ -56,7 +56,7 @@
                 @forelse($transaksis as $t)
                     <tr class="hover:bg-slate-50 transition">
                         <td class="px-6 py-4 font-mono font-bold text-slate-900">#{{ $t->id }}</td>
-                        <td class="px-6 py-4 text-xs text-slate-500">{{ $t->created_at->format('d M Y, H:i') }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-500">{{ $t->created_at->format('d M Y, H:i') }} WIB</td>
                         <td class="px-6 py-4 text-xs">
                             <span class="font-semibold text-slate-800 block">{{ $t->pengguna->nama ?? '-' }}</span>
                             <span class="text-[11px] text-slate-400">{{ $t->gudang->nama ?? '-' }}</span>

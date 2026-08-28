@@ -26,6 +26,11 @@ class CekModul
                 ->with('error', 'Fitur ini tidak tersedia di paket Anda saat ini.');
         }
 
+        if (! $pengguna->punyaAksesModul($kodeModul)) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Anda tidak memiliki hak akses untuk membuka menu ini.');
+        }
+
         return $next($request);
     }
 }

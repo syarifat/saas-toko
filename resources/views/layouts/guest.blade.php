@@ -41,8 +41,8 @@
             </div>
 
             <!-- Right: form -->
-            <div class="flex flex-col items-center justify-center px-6 py-12 bg-white">
-                <div class="w-full max-w-md">
+            <div class="flex flex-col items-center justify-center px-6 py-12 bg-slate-50/50">
+                <div class="w-full max-w-lg">
                     <div class="lg:hidden flex items-center gap-2.5 mb-8">
                         <div class="h-8 w-8 rounded-lg bg-slate-900 flex items-center justify-center">
                             <svg class="h-4.5 w-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">

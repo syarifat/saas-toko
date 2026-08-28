@@ -15,7 +15,7 @@
         <div class="text-center pb-3 border-b border-dashed border-slate-300">
             <h2 class="font-bold text-base text-slate-900">{{ $transaksi->toko->nama ?? 'SaaS Toko' }}</h2>
             <p class="text-[11px] text-slate-500">Struk Pembayaran Kasir</p>
-            <p class="text-[10px] text-slate-400">ID: #{{ $transaksi->id }} • {{ $transaksi->created_at->format('d/m/Y H:i') }}</p>
+            <p class="text-[10px] text-slate-400">ID: #{{ $transaksi->id }} • {{ $transaksi->created_at->format('d/m/Y H:i') }} WIB</p>
             <p class="text-[10px] text-slate-400">Kasir: {{ $transaksi->pengguna->nama ?? '-' }}</p>
         </div>
 

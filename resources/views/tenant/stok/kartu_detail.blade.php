@@ -30,7 +30,7 @@
             <tbody class="divide-y divide-slate-100">
                 @forelse($pergerakans as $m)
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-xs text-slate-500">{{ $m->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-500">{{ $m->created_at->format('d/m/Y H:i') }} WIB</td>
                         <td class="px-6 py-4">
                             <span class="px-2 py-0.5 rounded uppercase font-bold text-[10px] 
                                 {{ $m->jenis === 'masuk' ? 'bg-emerald-100 text-emerald-800' : ($m->jenis === 'keluar' ? 'bg-rose-100 text-rose-800' : ($m->jenis === 'transfer' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800')) }}">

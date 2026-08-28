@@ -150,10 +150,10 @@ Route::middleware(['auth', 'verified', 'konteks_toko'])
             Route::get('stok/kartu/{produk}', [StokController::class, 'kartuProduk'])->name('stok.kartu.detail');
         });
 
-        // ── Modul: karyawan ─────────────────────────────────────
-        Route::middleware('modul:karyawan')->group(function () {
-            Route::resource('karyawan', KaryawanController::class);
-        });
+        // ── Manajemen Karyawan & Akun Staf (Paket 2: Kasir, Paket 3: Gudang, Addon: HR) ──
+        Route::get('karyawan/hak-akses', [KaryawanController::class, 'hakAkses'])->name('karyawan.hak-akses');
+        Route::post('karyawan/hak-akses', [KaryawanController::class, 'simpanHakAkses'])->name('karyawan.hak-akses.simpan');
+        Route::resource('karyawan', KaryawanController::class);
 
         // ── Modul: absensi ──────────────────────────────────────
         Route::middleware('modul:absensi')->group(function () {

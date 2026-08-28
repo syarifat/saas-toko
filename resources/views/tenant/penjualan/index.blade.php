@@ -38,7 +38,7 @@
                         <td class="px-6 py-4 text-xs text-slate-400 italic">{{ $p->catatan ?? '-' }}</td>
                         <td class="px-6 py-4 text-right space-x-2">
                             <a href="{{ route('penjualan.show', $p) }}" class="px-2.5 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg">Detail</a>
-                            <form method="POST" action="{{ route('penjualan.destroy', $p) }}" class="inline" onsubmit="return confirm('Hapus catatan penjualan ini?')">
+                            <form method="POST" action="{{ route('penjualan.destroy', $p) }}" class="inline" data-confirm="Yakin ingin menghapus catatan penjualan ini?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-xs text-rose-600 hover:text-rose-800">Hapus</button>

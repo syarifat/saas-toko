@@ -39,4 +39,15 @@ class ModulToko extends Model
     {
         return $this->belongsTo(Modul::class);
     }
+
+    /**
+     * Set the keys for a save update query (composite primary keys).
+     */
+    protected function setKeysForSaveQuery($query)
+    {
+        $query->where('toko_id', '=', $this->getAttribute('toko_id'))
+            ->where('modul_id', '=', $this->getAttribute('modul_id'));
+
+        return $query;
+    }
 }

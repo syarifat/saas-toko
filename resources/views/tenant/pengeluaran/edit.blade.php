@@ -39,7 +39,7 @@
         </div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <button type="button" onclick="if(confirm('Hapus pengeluaran ini?')) document.getElementById('delete-pengeluaran-form').submit();"
+            <button type="button" onclick="confirmAction('Yakin ingin menghapus catatan pengeluaran ini?', () => document.getElementById('delete-pengeluaran-form').submit())"
                     class="text-xs font-semibold text-rose-600 hover:text-rose-800">
                 Hapus
             </button>

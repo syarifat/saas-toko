@@ -57,7 +57,7 @@
         </div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <button type="button" onclick="if(confirm('Yakin ingin menghapus toko ini beserta seluruh datanya?')) document.getElementById('delete-toko-form').submit();"
+            <button type="button" onclick="confirmAction('Yakin ingin menghapus toko ini beserta seluruh datanya?', () => document.getElementById('delete-toko-form').submit())"
                     class="px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition">
                 Hapus Toko
             </button>

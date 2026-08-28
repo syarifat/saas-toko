@@ -118,7 +118,7 @@
             <tbody class="divide-y divide-slate-100">
                 @forelse($riwayatPembayaran as $pay)
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-xs text-slate-500">{{ $pay->created_at->format('d M Y H:i') }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-500">{{ $pay->created_at->format('d M Y H:i') }} WIB</td>
                         <td class="px-6 py-4 text-xs font-bold text-slate-900">
                             {{ $pay->jenis === 'upgrade_paket' ? 'Upgrade: '.($pay->paket->nama ?? '-') : 'Addon: '.($pay->modul->nama ?? '-') }}
                         </td>

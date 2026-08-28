@@ -50,9 +50,9 @@
             <p class="text-xs text-slate-500">Menerapkan preset akan mengaktifkan seluruh modul bawaan paket tersebut.</p>
             <div class="space-y-2">
                 @foreach($pakets as $p)
-                    <form method="POST" action="{{ route('superadmin.toko.pakai-preset', [$toko, $p]) }}">
+                    <form method="POST" action="{{ route('superadmin.toko.pakai-preset', [$toko, $p]) }}" data-confirm="Terapkan preset [{{ $p->nama }}]? Modul terkait akan otomatis diaktifkan.">
                         @csrf
-                        <button type="submit" onclick="return confirm('Terapkan preset [{{ $p->nama }}]? Modul terkait akan otomatis diaktifkan.')"
+                        <button type="submit"
                                 class="w-full text-left px-3 py-2 text-xs font-semibold rounded-lg border flex items-center justify-between transition {{ $toko->paket_id === $p->id ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100' }}">
                             <span>{{ $p->nama }}</span>
                             @if($toko->paket_id === $p->id)
@@ -127,10 +127,9 @@
                             </td>
                             <td class="px-6 py-4 text-right space-x-2">
                                 @if($isAktif)
-                                    <form method="POST" action="{{ route('superadmin.toko.modul.nonaktifkan', [$toko, $modul->kode]) }}" class="inline">
+                                    <form method="POST" action="{{ route('superadmin.toko.modul.nonaktifkan', [$toko, $modul->kode]) }}" class="inline" data-confirm="Nonaktifkan modul [{{ $modul->nama }}]?">
                                         @csrf
                                         <button type="submit" 
-                                                onclick="return confirm('Nonaktifkan modul [{{ $modul->nama }}]?')"
                                                 class="px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition">
                                             Matikan
                                         </button>
@@ -144,11 +143,10 @@
                                             </button>
                                         </form>
                                     @else
-                                        <form method="POST" action="{{ route('superadmin.toko.modul.aktifkan', [$toko, $modul->kode]) }}" class="inline">
+                                        <form method="POST" action="{{ route('superadmin.toko.modul.aktifkan', [$toko, $modul->kode]) }}" class="inline" data-confirm="Modul ini membutuhkan: {{ $belumAktif->pluck('nama')->join(', ') }}. Aktifkan modul beserta semua dependensinya?">
                                             @csrf
                                             <input type="hidden" name="dengan_dependency" value="1">
                                             <button type="submit" 
-                                                    onclick="return confirm('Modul ini membutuhkan: {{ $belumAktif->pluck('nama')->join(', ') }}. Aktifkan modul beserta semua dependensinya?')"
                                                     class="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition"
                                                     title="Aktifkan modul beserta {{ $belumAktif->count() }} dependensinya">
                                                 Aktifkan + Dep ↗

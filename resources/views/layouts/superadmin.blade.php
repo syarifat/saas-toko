@@ -16,11 +16,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-slate-100 text-slate-800">
-    <div class="min-h-screen flex">
+    <div class="h-screen flex overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 h-screen border-r border-slate-800">
             <!-- Brand -->
-            <div class="h-16 flex items-center px-6 bg-slate-950 font-bold text-lg text-white tracking-wide border-b border-slate-800 gap-2">
+            <div class="h-16 flex items-center px-6 bg-slate-950 font-bold text-lg text-white tracking-wide border-b border-slate-800 gap-2 shrink-0">
                 <span class="p-1.5 bg-indigo-600 rounded-lg text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -30,7 +30,7 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+            <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto sidebar-scroll">
                 <a href="{{ route('superadmin.dashboard') }}"
                    class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('superadmin.dashboard') ? 'bg-indigo-600 text-white' : 'hover:bg-slate-800 text-slate-300' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,8 +80,8 @@
                 </a>
             </nav>
 
-            <!-- User Info & Logout -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950">
+            <!-- User Info & Logout (Fixed at bottom) -->
+            <div class="p-4 border-t border-slate-800 bg-slate-950 shrink-0">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->nama ?? 'Super Admin' }}</p>
@@ -100,7 +100,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-w-0">
+        <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
             <!-- Topbar -->
             <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
                 <h1 class="text-xl font-bold text-slate-800">{{ $header ?? 'Superadmin Panel' }}</h1>
@@ -111,44 +111,51 @@
                 </div>
             </header>
 
-            <!-- Alerts -->
+            <!-- Main Content Area -->
             <main class="flex-1 p-6 overflow-y-auto">
-                @if(session('success'))
-                    <div class="mb-5 p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>{{ session('success') }}</span>
-                        </div>
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="mb-5 p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-rose-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                            <span>{{ session('error') }}</span>
-                        </div>
-                    </div>
-                @endif
-
-                @if($errors->any())
-                    <div class="mb-5 p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800">
-                        <p class="font-semibold mb-1">Terdapat kesalahan:</p>
-                        <ul class="list-disc list-inside text-sm space-y-0.5">
-                            @foreach($errors->all() as $err)
-                                <li>{{ $err }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 @yield('content')
             </main>
         </div>
     </div>
+
+    <!-- SweetAlert2 Global Notifications -->
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{ addslashes(session('success')) }}'
+                });
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Perhatian',
+                    text: '{{ addslashes(session('error')) }}',
+                    confirmButtonColor: '#4f46e5',
+                    confirmButtonText: 'Tutup'
+                });
+            });
+        </script>
+    @endif
+
+    @if($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terdapat Kesalahan Input',
+                    html: '<ul style="text-align:left; font-size: 14px; margin-top: 8px; line-height: 1.6;">@foreach($errors->all() as $err)<li>• {{ addslashes($err) }}</li>@endforeach</ul>',
+                    confirmButtonColor: '#4f46e5',
+                    confirmButtonText: 'Perbaiki'
+                });
+            });
+        </script>
+    @endif
 </body>
 </html>
