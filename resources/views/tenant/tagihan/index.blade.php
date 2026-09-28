@@ -124,7 +124,7 @@
                         </td>
                         <td class="px-6 py-4 font-bold text-slate-900 text-xs">Rp {{ number_format($pay->jumlah, 0, ',', '.') }}</td>
                         <td class="px-6 py-4 text-xs">
-                            <a href="{{ asset('storage/'.$pay->bukti_transfer) }}" target="_blank" class="text-indigo-600 underline">Lihat Struk</a>
+                            <a href="{{ Storage::url($pay->bukti_transfer) }}" target="_blank" class="text-indigo-600 underline">Lihat Struk</a>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold

@@ -51,7 +51,7 @@
                         <td class="px-6 py-4 font-bold text-rose-600">Rp {{ number_format($p->nominal, 0, ',', '.') }}</td>
                         <td class="px-6 py-4 text-xs">
                             @if($p->bukti_struk)
-                                <a href="{{ asset('storage/'.$p->bukti_struk) }}" target="_blank" class="text-indigo-600 underline">Lihat Foto</a>
+                                <a href="{{ Storage::url($p->bukti_struk) }}" target="_blank" class="text-indigo-600 underline">Lihat Foto</a>
                             @else
                                 <span class="text-slate-400">-</span>
                             @endif

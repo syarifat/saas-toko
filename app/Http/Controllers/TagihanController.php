@@ -44,7 +44,7 @@ class TagihanController extends Controller
             'bukti_transfer' => ['required', 'image', 'max:2048'],
         ]);
 
-        $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
+        $path = $request->file('bukti_transfer')->store('bukti_transfer', config('filesystems.default'));
 
         Pembayaran::create([
             'toko_id' => $user->toko_id,
