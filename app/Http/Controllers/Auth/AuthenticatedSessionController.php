@@ -17,12 +17,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        $penggunas = Pengguna::with(['toko.paket'])
-            ->where('aktif', true)
-            ->orderByRaw("CASE WHEN peran = 'superadmin' THEN 1 WHEN peran = 'admin' THEN 2 ELSE 3 END, toko_id ASC")
-            ->get();
-
-        return view('auth.login', compact('penggunas'));
+        return view('auth.login');
     }
 
     /**
