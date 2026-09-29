@@ -61,7 +61,7 @@ class AbsensiController extends Controller
 
         $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('absensi_masuk', 'public');
+            $fotoPath = $request->file('foto')->store('absensi_masuk', config('filesystems.default'));
         }
 
         $now = now();
@@ -119,7 +119,7 @@ class AbsensiController extends Controller
 
         $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('absensi_keluar', 'public');
+            $fotoPath = $request->file('foto')->store('absensi_keluar', config('filesystems.default'));
         }
 
         $now = now();

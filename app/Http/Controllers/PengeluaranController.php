@@ -44,7 +44,7 @@ class PengeluaranController extends Controller
 
         $path = null;
         if ($request->hasFile('bukti_struk')) {
-            $path = $request->file('bukti_struk')->store('bukti_pengeluaran', 'public');
+            $path = $request->file('bukti_struk')->store('bukti_pengeluaran', config('filesystems.default'));
         }
 
         Pengeluaran::create([
@@ -75,9 +75,9 @@ class PengeluaranController extends Controller
 
         if ($request->hasFile('bukti_struk')) {
             if ($pengeluaran->bukti_struk) {
-                Storage::disk('public')->delete($pengeluaran->bukti_struk);
+                Storage::disk(config('filesystems.default'))->delete($pengeluaran->bukti_struk);
             }
-            $validated['bukti_struk'] = $request->file('bukti_struk')->store('bukti_pengeluaran', 'public');
+            $validated['bukti_struk'] = $request->file('bukti_struk')->store('bukti_pengeluaran', config('filesystems.default'));
         }
 
         $pengeluaran->update($validated);
